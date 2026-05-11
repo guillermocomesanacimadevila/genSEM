@@ -1,0 +1,57 @@
+Bootstrap: docker
+From: mambaorg/micromamba:1.5.10
+
+%post
+    cat > /tmp/env.yml <<'EOF'
+name: genSEM
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python=3.12
+  - pip
+  - numpy
+  - pandas
+  - scipy
+  - seaborn
+  - matplotlib
+  - scanpy
+  - statsmodels
+  - plink
+  - zstd
+  - r-base
+  - r-remotes
+  - r-data.table
+  - r-devtools
+  - r-class
+  - r-proxy
+  - r-e1071
+  - r-vroom
+  - r-tzdb
+  - r-readr
+  - r-plyr
+  - r-gdata
+  - r-lavaan
+  - r-matrix
+  - r-dplyr
+  - r-mgsub
+  - r-rcpp
+  - r-doparallel
+  - r-splitstackshape
+  - r-r.utils
+  - pip:
+      - polars
+      - liftover
+      - adjustText
+EOF
+
+    micromamba install -y -n base -f /tmp/env.yml
+    micromamba clean -a -y
+
+    /opt/conda/bin/Rscript -e 'remotes::install_github("GenomicSEM/GenomicSEM", dependencies=FALSE)'
+
+%environment
+    export PATH=/opt/conda/bin:$PATH
+
+%runscript
+    exec "$@"
