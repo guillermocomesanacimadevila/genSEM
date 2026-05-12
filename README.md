@@ -55,3 +55,13 @@ ssh <user>@falconlogin.cf.ac.uk \
 'cd /shared/home1/<user>/genSEM && \
 apptainer exec env/genSEM.sif Rscript - \
 AD SCZ MDD out' < CFA.R
+
+---
+
+## Run TFA on AD loading with MDD+SCZ latent factor
+
+ssh <user>@falconlogin.cf.ac.uk \
+'cd /shared/home1/<user>/genSEM && \
+apptainer exec env/genSEM.sif Rscript - \
+AD SCZ MDD out' < TFA.R
+
