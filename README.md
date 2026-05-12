@@ -45,3 +45,13 @@ MDD out/QC/MDD/MDD.tsv \
 0.07 0.01 0.15 \
 out' < genSEM.R
 ´´´ 
+
+
+---
+
+## Run CFA.R
+
+ssh <user>@falconlogin.cf.ac.uk \
+'cd /shared/home1/<user>/genSEM && \
+apptainer exec env/genSEM.sif Rscript - \
+AD SCZ MDD out' < CFA.R
