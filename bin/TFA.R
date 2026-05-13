@@ -6,23 +6,25 @@ suppressPackageStartupMessages({
 
 args <- commandArgs(trailingOnly=TRUE)
 
-if (length(args) < 4) {
-  stop("Usage: Rscript CFA.R <pheno1_id> <pheno2_id> <pheno3_id> <out_dir>")
+if (length(args) < 5) {
+  stop("Usage: Rscript CFA.R <pheno1_id> <pheno2_id> <pheno3_id> <pheno4_id> <out_dir>")
 }
 
 pheno1_id <- args[1]
 pheno2_id <- args[2]
 pheno3_id <- args[3]
-out_dir <- args[4]
+pheno4_id <- args[4]
+out_dir <- args[5]
 
 trait_names <- c(
   pheno1_id, # AD
   pheno2_id, # SCZ
-  pheno3_id  # MDD
+  pheno3_id, # MDD
+  pheno4_id  # BIP
 )
 
 hm3 <- "ref/ldsc/eur_w_ld_chr/w_hm3.snplist"
-ld <- "ref/ldsc/eur_w_ld_chr/"
+ld  <- "ref/ldsc/eur_w_ld_chr/"
 wld <- "ref/ldsc/weights_hm3_no_hla/"
 
 # LOAD LDSC output
@@ -35,9 +37,8 @@ LDSC_INT <- readRDS(ldsc)
 # "
 
 INT.model <- paste0(
-  "F1 =~ L1*", pheno2_id, " + L1*", pheno3_id, "\n",
-  "F1 ~~ ", pheno1_id, "\n",
-  pheno1_id, " ~~ ", pheno1_id
+  "F1 =~ ", pheno2_id, " + ", pheno3_id, " + ", pheno4_id, "\n",
+  "F1 ~~ ", pheno1_id, "\n"
 )
 
 sem_dir <- file.path(out_dir, "sem")

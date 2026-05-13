@@ -6,19 +6,21 @@ suppressPackageStartupMessages({
 
 args <- commandArgs(trailingOnly=TRUE)
 
-if (length(args) < 4) {
-  stop("Usage: Rscript CFA.R <pheno1_id> <pheno2_id> <pheno3_id> <out_dir>")
+if (length(args) < 5) {
+  stop("Usage: Rscript CFA.R <pheno1_id> <pheno2_id> <pheno3_id> <pheno4_id> <out_dir>")
 }
 
 pheno1_id <- args[1]
 pheno2_id <- args[2]
 pheno3_id <- args[3]
-out_dir <- args[4]
+pheno4_id <- args[4]
+out_dir <- args[5]
 
 trait_names <- c(
   pheno1_id,
   pheno2_id,
-  pheno3_id
+  pheno3_id,
+  pheno4_id
 )
 
 hm3 <- "ref/ldsc/eur_w_ld_chr/w_hm3.snplist"
@@ -36,14 +38,17 @@ LDSC_INT <- readRDS(ldsc)
 
 # contruct multiv LDSC matrix
 # CFA
+
+# IntResults <- usermodel(covstruc=covstruc, model=INT.model)
 covstruc <- LDSC_INT
 INT.model <- paste0("F1 =~ ", paste(trait_names, collapse=" + "))
 
-IntResults <- usermodel(
-  covstruc=covstruc,
-  model=INT.model,
-  std.lv=TRUE
-)
+# IntResults <- usermodel(covstruc=covstruc, model=INT.model)
+# IntResults <- usermodel(
+#  covstruc=covstruc,
+#  model=INT.model,
+#  std.lv=TRUE
+# )
 
 
 sem_dir <- file.path(out_dir, "sem")
