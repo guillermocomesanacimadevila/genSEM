@@ -82,6 +82,7 @@ def perform_qc(
     pos_col: str,
     chr_col: str,
     remove_mhc: bool,
+    remove_apoe: bool,
     genome_build: str,
     falcon_user: str,
     n_cases: int,
@@ -177,6 +178,19 @@ def perform_qc(
         n_after = df.height
         print(f"Removed MHC variants: {n_before - n_after}")
 
+    # remove APOE
+    if remove_apoe:
+        n_before = df.height
+        df = df.filter(
+            ~(
+                (pl.col(chr_col) == "19") &
+                (pl.col(pos_col) >= 44000000) &
+                (pl.col(pos_col) <= 46500000)
+            )
+        )
+        n_after = df.height
+        print(f"Removed APOE SNPs: {n_before - n_after}")
+
     # rename cols to LDSC / genSEM format
     if info_col is not None:
         ldsc = df.select(
@@ -236,6 +250,7 @@ def main():
     parser.add_argument("--n_cases", required=True, type=int)
     parser.add_argument("--n_controls", required=True, type=int)
     parser.add_argument("--af_col", required=True)
+    parser.add_argument("--remove_apoe", action="store_true")
     args = parser.parse_args()
     perform_qc(
         pheno_id=args.pheno_id,
@@ -258,6 +273,7 @@ def main():
         genome_build=args.genome_build,
         n_cases=args.n_cases,
         n_controls=args.n_controls,
+        remove_apoe=args.remove_apoe
     )
 
 if __name__ == "__main__":
